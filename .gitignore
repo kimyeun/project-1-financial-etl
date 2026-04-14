@@ -1,0 +1,19 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Logs
+logs/
+
+# Docker volumes
+postgres_data/
+
+# OS
+.DS_Store
+Thumbs.db

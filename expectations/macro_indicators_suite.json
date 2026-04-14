@@ -1,0 +1,40 @@
+{
+  "suite_name": "macro_indicators_suite",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_to_exist",
+      "kwargs": { "column": "date" }
+    },
+    {
+      "expectation_type": "expect_column_to_exist",
+      "kwargs": { "column": "series_id" }
+    },
+    {
+      "expectation_type": "expect_column_to_exist",
+      "kwargs": { "column": "indicator_name" }
+    },
+    {
+      "expectation_type": "expect_column_to_exist",
+      "kwargs": { "column": "indicator_value" }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": { "column": "date" }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": { "column": "series_id" }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "indicator_name",
+        "value_set": ["GDP", "CPI", "UNEMPLOYMENT", "FED_FUNDS_RATE", "10Y_TREASURY"]
+      }
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "kwargs": { "column": "series_id", "min_value": 0.01 }
+    }
+  ]
+}

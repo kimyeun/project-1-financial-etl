@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: financial_etl_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-etl_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-etl_pass}
+      POSTGRES_DB: ${DB_NAME:-financial_etl}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/01_create_tables.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-etl_user} -d ${DB_NAME:-financial_etl}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  etl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: financial_etl_runner
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DB_HOST: postgres   # override to use container name
+    command: ["python", "src/main.py"]
+    volumes:
+      - ./expectations:/app/expectations
+      - ./logs:/app/logs
+
+volumes:
+  postgres_data:
